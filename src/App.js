@@ -6,7 +6,32 @@ import NavBar from './components/NavBar'
 import DropDown from './components/DropDown'
 
 class App extends React.Component {
-    dataSet = [
+    dataSet = [{
+        id: '000001',
+        name: 'Tiger Nixon',
+        position: 'System Architect',
+        office: 'Edingburgh',
+        extn: '5421',
+        startDate: '2011/04/25',
+        salary: '$320,800'
+    },{
+        id: '000002',
+        name: 'Garrett Winters',
+        position: 'Accountant',
+        office: 'Tokyo',
+        extn: '8422',
+        startDate: '2011/07/25',
+        salary: '$170,750'
+    },{
+        id: '000003',
+        name: 'Ashton Cox',
+        position: 'Senior Javascript Developer',
+        office: 'San Francisco',
+        extn: '1562',
+        startDate: '2009/01/12',
+        salary: '$86,000'
+    }]
+    /* dataSet = [
         [ "Tiger Nixon", "System Architect", "Edinburgh", "5421", "2011/04/25", "$320,800" ],
         [ "Garrett Winters", "Accountant", "Tokyo", "8422", "2011/07/25", "$170,750" ],
         [ "Ashton Cox", "Junior Technical Author", "San Francisco", "1562", "2009/01/12", "$86,000" ],
@@ -43,7 +68,7 @@ class App extends React.Component {
         [ "Gavin Cortez", "Team Leader", "San Francisco", "2860", "2008/10/26", "$235,500" ],
         [ "Martena Mccray", "Post-Sales support", "Edinburgh", "8240", "2011/03/09", "$324,050" ],
         [ "Unity Butler", "Marketing Designer", "San Francisco", "5384", "2009/12/09", "$85,675" ]
-    ];
+    ]; */
 
     render(){
         return(
