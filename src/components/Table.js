@@ -9,18 +9,7 @@ import { faTrash, faPen } from '@fortawesome/free-solid-svg-icons'
 class Table extends React.Component {
 
     componentDidMount(){
-        this.$el = $(this.el)
-        this.$el.DataTable(/* {
-            data: this.props.dataSet,
-            columns: [
-                { title: "Name" },
-                { title: "Position" },
-                { title: "Office" },
-                { title: "Extn." },
-                { title: "Start date" },
-                { title: "Salary" }
-            ]} */
-        )
+        $(this.el).DataTable()
     }
 
     render(){
@@ -33,25 +22,31 @@ class Table extends React.Component {
                             <th>Name</th> 
                             <th>Position</th>
                             <th>office</th>
-                            <th>Extn.</th>
                             <th>Start Date</th>
                             <th>Salary</th>
+                            <th>State</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         {this.props.dataSet.map( (row) =>{
+                            let elementState 
+                            if(row.State === "1"){
+                                elementState = <span class="badge badge-success">Active</span>
+                            }else{
+                                elementState = <span class="badge badge-danger">Inactive</span>
+                            }
                             return(
                             <tr key ={row.id}>
                                 <td>{row.id}</td>
                                 <td>{row.name}</td>
                                 <td>{row.position}</td>
                                 <td>{row.office}</td>
-                                <td>{row.extn}</td>
                                 <td>{row.startDate}</td>
                                 <td>{row.salary}</td>
+                                <td>{elementState}</td>
                                 <td>
-                                    <button className="btn btn-sm btn-info">
+                                    <button className="btn btn-sm btn-info" data-toggle="modal" data-target="#exampleModal">
                                         <FontAwesomeIcon icon={faPen} /> 
                                     </button>
                                     <span> </span>
