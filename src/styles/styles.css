@@ -1,0 +1,9 @@
+.div-home{
+    background: linear-gradient(to right, green, blue);
+    height: 100%;
+    width: 100%;
+}
+
+.lg-top-space{
+    margin-top: 50px;
+}

@@ -5,6 +5,7 @@ import './DataTables/datatables.min.css'
 import './DataTables/DataTables-1.10.18/css/dataTables.bootstrap4.min.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash, faPen } from '@fortawesome/free-solid-svg-icons'
+import Modal from './Modal'
 
 class Table extends React.Component {
 
@@ -13,9 +14,15 @@ class Table extends React.Component {
     }
 
     render(){
+        const {dataSet, form, handleChange, handleSubmit, handleEdit, disabledId} = this.props
         return(
             <React.Fragment>
-                <table className=" table table-hover table-sm table-secondary table-bordered" width="100%" ref={el => this.el = el}>
+                <Modal handleChange={handleChange} 
+                        form={form} 
+                        handleSubmit={handleSubmit}
+                        disabledId={disabledId}
+                />
+                <table className=" table table-hover table-sm table table-bordered" width="100%" ref={el => this.el = el}>
                     <thead>
                         <tr>
                             <th>Identication</th>
@@ -23,18 +30,18 @@ class Table extends React.Component {
                             <th>Position</th>
                             <th>office</th>
                             <th>Start Date</th>
-                            <th>Salary</th>
+                            <th>Salary ($)</th>
                             <th>State</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {this.props.dataSet.map( (row) =>{
+                        {dataSet.map( (row) =>{
                             let elementState 
                             if(row.State === "1"){
-                                elementState = <span class="badge badge-success">Active</span>
+                                elementState = <span className="badge badge-success">Active</span>
                             }else{
-                                elementState = <span class="badge badge-danger">Inactive</span>
+                                elementState = <span className="badge badge-danger">Inactive</span>
                             }
                             return(
                             <tr key ={row.id}>
@@ -46,11 +53,11 @@ class Table extends React.Component {
                                 <td>{row.salary}</td>
                                 <td>{elementState}</td>
                                 <td>
-                                    <button className="btn btn-sm btn-info" data-toggle="modal" data-target="#exampleModal">
+                                    <button id={row.id} onClick={() => handleEdit(row)} className="btn btn-sm btn-info" data-toggle="modal" data-target="#exampleModal">
                                         <FontAwesomeIcon icon={faPen} /> 
                                     </button>
                                     <span> </span>
-                                    <button className="btn btn-sm btn-danger">
+                                    <button id={row.id} className="btn btn-sm btn-danger">
                                         <FontAwesomeIcon icon={faTrash} />
                                     </button>
                                 </td>
