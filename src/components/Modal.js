@@ -1,16 +1,9 @@
 import React from 'react'
-import $ from 'jquery'
 
 class Modal extends React.Component{
-
-    closeModal = () =>{
-        $(this.rcm).click();
-    }
-
-    dis = 'disabled'
-
     render(){
-        const {handleChange, form, handleSubmit, disabledId} = this.props
+        const {handleChange, form, handleSubmit, disabledId, btnName, myref} = this.props
+
         return(
              <React.Fragment>
                 <div className="modal fade" id="exampleModal" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -28,13 +21,13 @@ class Modal extends React.Component{
                                 <div className="form-group row">
                                     <label htmlFor="inputId" className="col-sm-3 col-form-label">Identification</label>
                                     <div className="col-sm-9">
-                                        <input value={form.Id} onChange={handleChange} type="number" className="form-control" name="Id" id="inputId" placeholder="Identification" disabled={disabledId}/>
+                                        <input value={form.Ident} onChange={handleChange} type="number" className="form-control" name="Ident" id="inputId" placeholder="Identification" disabled={disabledId}/>
                                     </div>
                                 </div>
                                 <div className="form-group row">
                                     <label htmlFor="inputName" className="col-sm-3 col-form-label">Name</label>
                                     <div className="col-sm-9">
-                                        <input value={form.name} onChange={handleChange} type="text" className="form-control" name="name" id="inputName" placeholder="Name" required autoComplete="off"/>
+                                        <input value={form.Name} onChange={handleChange} type="text" className="form-control" name="Name" id="inputName" placeholder="Name" required autoComplete="off"/>
                                     </div>
                                 </div>
                                 <div className="form-group row">
@@ -46,19 +39,19 @@ class Modal extends React.Component{
                                 <div className="form-group row">
                                     <label htmlFor="inputOffice" className="col-sm-3 col-form-label">Office</label>
                                     <div className="col-sm-9">
-                                        <input value={form.office} onChange={handleChange} type="text" className="form-control" name="office" id="inputOffice" placeholder="Office" required autoComplete="off"/>
+                                        <input value={form.Office} onChange={handleChange} type="text" className="form-control" name="Office" id="inputOffice" placeholder="Office" required autoComplete="off"/>
                                     </div>
                                 </div>
                                 <div className="form-group row">
                                     <label htmlFor="inputDate" className="col-sm-3 col-form-label">Start Date</label>
                                     <div className="col-sm-9">
-                                        <input value={form.Sdate} onChange={handleChange} type="date" className="form-control" name="Sdate" id="inputDate" placeholder="Start Date" required/>
+                                        <input value={form.StartDate} onChange={handleChange} type="date" className="form-control" name="StartDate" id="inputDate" placeholder="Start Date" required/>
                                     </div>
                                 </div>
                                 <div className="form-group row">
                                     <label htmlFor="inputSalary" className="col-sm-3 col-form-label">Salary</label>
                                     <div className="col-sm-9">
-                                        <input value={form.Salary} onChange={handleChange} type="number" className="form-control" name="Salary" id="inputSalary" placeholder="Salary" required/>
+                                        <input value={form.Salary} onChange={handleChange} type="number" className="form-control" name="Salary" id="inputSalary" placeholder="Salary" lang="es-150"/>
                                     </div>
                                 </div>
 
@@ -83,8 +76,8 @@ class Modal extends React.Component{
                         </div>
 
                             <div className="modal-footer">
-                                <button type="submit" className="btn btn-primary" onClick={handleSubmit}>Save</button>
-                                <button ref={rcm => this.rcm = rcm} type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="submit" className="btn btn-primary" onClick={handleSubmit}>{btnName}</button>
+                                <button ref={myref} type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
                             </div>
                         </div>
                     </div>

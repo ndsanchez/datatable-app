@@ -2,39 +2,65 @@ import React from 'react'
 import Table from '../components/Table'
 import NavBar from '../components/NavBar'
 import AddButton from '../components/AddButton'
+import Loading from '../components/Loading'
+import Modal from '../components/Modal'
+import $ from 'jquery'
+import Swal from 'sweetalert2'
 
 class Ptable extends React.Component {
  
     state ={
+        data: [],
         form:{
-            Id:'',
+            Ident:'',
             Position:'',
             Salary:'',
-            Sdate:'',
+            StartDate:'',
             State: '1',
-            name:'',
-            office:''
+            Name:'',
+            Office:''
         },
-        disabledId: false
+        disabledId: false,
+        Loading: true,
+        btnName: 'Save',
+        close: false
+    }
+
+    async componentDidMount(){
+        await this.fetchData()
+    }
+
+    fetchData = async () =>{
+        let res = await fetch('http://localhost:5000/datatable')
+        let data = await res.json()
+
+        this.setState({
+            data,
+            Loading: false
+        })
+    }
+
+    handleClose = () =>{        //function to close Modal
+        $(this.rcm).click()
     }
 
     handleNew = () => {
         this.setState({
             form:{
-                Id: '',
+                Ident: '',
                 Position: '',
                 Salary: '',
-                Sdate: '',
+                StartDate: '',
                 State: '1',
-                name: '',
-                office: ''
+                Name: '',
+                Office: ''
             },
-            disabledId: false
+            disabledId: false,
+            btnName: 'Save'
         })
     }
 
     handleChange = (e) =>{
-        console.log([e.target.name],': ',e.target.value)
         this.setState({
           form:{...this.state.form,
                 [e.target.name]: e.target.value
@@ -42,39 +68,104 @@ class Ptable extends React.Component {
         })
     }    
 
-    handleSubmit = (e) => {
+    handleSubmit = async (e) => {
         e.preventDefault()
-        console.log('working...')
-        this.setState({
-            form:{
-                Id:'',
-                Position:'',
-                Salary:'',
-                Sdate:'',
-                State: '1',
-                name:'',
-                office:''
-            }
-        })
-        //this.closeModal()
+        let config = {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(this.state.form)
+        }
+        let res = await fetch(`http://localhost:5000/datatable/${this.state.btnName}`,config)
+        let resJson = await res.json()
+
+        if(resJson.request === '1'){
+            let message
+            (this.state.btnName === 'Save')? message = 'New user created': message = 'This user has been edited'
+            this.handleClose();//close modal
+            this.fetchData()
+            Swal.fire(
+                'Completed!',
+                 message,
+                'success'
+            )    
+        }else{
+            Swal.fire(
+                'Error!',
+                'Your request could not be proccessed',
+                'error'
+            )
+        }
     } 
     
     handleEdit = (row) => {
           this.setState({
             form:{
-                Id: row.id,
-                Position: row.position,
-                Salary: row.salary,
-                Sdate: row.startDate,
+                Ident: row.Ident,
+                Position: row.Position,
+                Salary: row.Salary,
+                StartDate: row.StartDate,
                 State: row.State,
-                name: row.name,
-                office: row.office
+                Name: row.Name,
+                Office: row.Office
             },
-            disabledId: true
+            disabledId: true,
+            btnName: 'Edit'
         })  
-    }    
+    }
 
+    handleDelete = (i) =>{
+        let config = {
+            method: 'POST',
+            headers: {
+                'Accept':'application/json',
+                'Content-Type' : 'Application/json',
+            },
+            body: JSON.stringify({
+                Ident: i
+            })
+        }
+
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+          }).then(async (result) => {
+            if (result.value) {
+                let res = await fetch('http://localhost:5000/datatable/Delete',config)
+                let resConv = await res.json()
+        
+                if(resConv.request === '1'){
+                    Swal.fire(
+                        'Deleted!',
+                        'This user has been deleted.',
+                        'success'
+                    )
+                    this.fetchData()
+                }else{
+                    Swal.fire(
+                        'Error!',
+                        'Your request could not be proccessed',
+                        'error'
+                    )
+                }
+
+
+            }
+          })
+
+    }
+    
     render(){
+        if(this.state.Loading)
+            return <Loading/>
+            
         return(
             <React.Fragment>
                 <div>
@@ -82,45 +173,26 @@ class Ptable extends React.Component {
                 </div>
                 <br/>
                 <div className="container">
+                    <Modal handleChange={this.handleChange} 
+                            form={this.state.form} 
+                            handleSubmit={this.handleSubmit}
+                            disabledId={this.state.disabledId}
+                            btnName={this.state.btnName}
+                            close={this.state.close}
+                            myref={x => this.rcm = x}
+                    />
                     <AddButton handleNew={this.handleNew}/>
                 </div>
                 <br/>
                 <div className="container">
-                    <Table dataSet={this.dataSet}
-                            form={this.state.form}
-                            handleChange={this.handleChange}
-                            handleSubmit={this.handleSubmit}
+                    <Table dataSet={this.state.data}
                             handleEdit={this.handleEdit}
-                            disabledId={this.state.disabledId}/>
+                            handleDelete={this.handleDelete}
+                    />
                 </div>
             </React.Fragment>
         )
     }
-    dataSet = [{
-        id: '000001',
-        name: 'Tiger Nixon',
-        position: 'System Architect',
-        office: 'Edingburgh',
-        startDate: '2011-04-25',
-        salary: '320.800',
-        State: '1'
-    },{
-        id: '000002',
-        name: 'Ashton Cox',
-        position: 'Accountant',
-        office: 'Tokyo',
-        startDate: '2011-07-25',
-        salary: '170.750',
-        State: '1'
-    },{
-        id: '000003',
-        name: 'Garrett Winters',
-        position: 'Senior Javascript Developer',
-        office: 'San Francisco',
-        startDate: '2009-01-12',
-        salary: '86.000',
-        State: '0'
-    }]
 }
 
 export default Ptable
