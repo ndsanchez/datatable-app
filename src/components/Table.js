@@ -16,7 +16,7 @@ class Table extends React.Component {
         const {dataSet, handleEdit, handleDelete} = this.props
         return(
             <React.Fragment>
-                <table className=" table table-hover table-sm table-secondary table-bordered" width="100%" ref={el => this.el = el}>
+                <table className=" table table-hover table-sm table table-bordered" width="100%" ref={el => this.el = el}>
                     <thead>
                         <tr>
                             <th>Identification</th>

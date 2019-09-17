@@ -6,6 +6,7 @@ import Loading from '../components/Loading'
 import Modal from '../components/Modal'
 import $ from 'jquery'
 import Swal from 'sweetalert2'
+import apiUrl from '../config'
 
 class Ptable extends React.Component {
  
@@ -31,7 +32,7 @@ class Ptable extends React.Component {
     }
 
     fetchData = async () =>{
-        let res = await fetch('http://localhost:5000/datatable')
+        let res = await fetch(apiUrl)
         let data = await res.json()
 
         this.setState({
@@ -78,7 +79,7 @@ class Ptable extends React.Component {
             },
             body: JSON.stringify(this.state.form)
         }
-        let res = await fetch(`http://localhost:5000/datatable/${this.state.btnName}`,config)
+        let res = await fetch(`${apiUrl}/${this.state.btnName}`,config)
         let resJson = await res.json()
 
         if(resJson.request === '1'){
@@ -92,9 +93,11 @@ class Ptable extends React.Component {
                 'success'
             )    
         }else{
+            let mes = '';
+            (this.state.btnName === 'Save')?mes=', Id could be repeated':mes=''
             Swal.fire(
                 'Error!',
-                'Your request could not be proccessed',
+                `Your request could not be proccessed${mes}`,
                 'error'
             )
         }
@@ -138,7 +141,7 @@ class Ptable extends React.Component {
             confirmButtonText: 'Yes, delete it!'
           }).then(async (result) => {
             if (result.value) {
-                let res = await fetch('http://localhost:5000/datatable/Delete',config)
+                let res = await fetch(`${apiUrl}/Delete`, config)
                 let resConv = await res.json()
         
                 if(resConv.request === '1'){
